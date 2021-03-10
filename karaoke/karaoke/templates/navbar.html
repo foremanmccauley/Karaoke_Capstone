@@ -1,0 +1,6 @@
+<div>
+    {% url 'index' as index_url %}
+    <span>{% if request.path == index_url %} Home {% else %} <a href="{% url 'index' %}"> Home</a>{% endif %}</span>
+    {% url 'recording' as recording_url %}
+    <span>{% if request.path == recording_url %} Recording {% else %}<a href="{% url 'recording' %}"> Recording</a>{% endif %}</span>
+</div>
