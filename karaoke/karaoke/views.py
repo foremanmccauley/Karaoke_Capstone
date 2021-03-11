@@ -6,3 +6,7 @@ def recording(request):
     return render(request, 'recording.html')
 def songselection(request):
     return render(request, 'songselection.html')
+def register(request):
+    return render(request, 'register.html')
+def login(request):
+    return render(request, 'login.html')
