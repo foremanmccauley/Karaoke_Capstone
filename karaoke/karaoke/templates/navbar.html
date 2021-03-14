@@ -5,4 +5,8 @@
     <span>{% if request.path == recording_url %} Recording {% else %}<a href="{% url 'recording' %}"> Recording</a>{% endif %}</span>
     {% url 'songselection' as songselection_url %}
     <span>{% if request.path == songselection_url %} Song Selection {% else %}<a href="{% url 'songselection' %}"> Song Selection</a>{% endif %}</span>
+    {% url 'register' as register_url %}
+    <span>{% if request.path == register_url %} Sign Up {% else %}<a href="{% url 'register' %}"> Sign Up</a>{% endif %}</span>
+    {% url 'login' as login_url %}
+    <span>{% if request.path == login_url %} Log In {% else %}<a href="{% url 'login' %}"> Log In</a>{% endif %}</span>
 </div>
