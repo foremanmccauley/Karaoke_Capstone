@@ -25,5 +25,6 @@ urlpatterns = [
     path('recording',views.recording, name="recording"),
     path('songselection',views.songselection, name="songselection"),
     path('register',views.register, name="register"),
-    path('login',views.login, name="login"),
+    path('login',views.loginpage, name="loginpage"),
+    path('logout',views.logoutuser, name="logoutuser"),
 ]
