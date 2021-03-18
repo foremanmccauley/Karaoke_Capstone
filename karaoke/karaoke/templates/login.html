@@ -44,7 +44,7 @@
 		.login_btn {
 			width: 100%;
 			background: #a7a7a7 !important;
-			color: black !important;
+			color: #fff !important;
 		}
 		.login_btn:focus {
 			box-shadow: none !important;
@@ -73,7 +73,7 @@
     }
 
 		#messages{
-			background-color: grey;
+			background-color: #a7a7a7;
 			color: #fff;
 			padding: 10px;
 			margin-top: 10px;
@@ -98,10 +98,10 @@
 						{% csrf_token %}
 						<div class="input-group mb-3">
 							<div class="input-group-append">
-								<span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
 							</div>
 
-							<input type="text" name="email" placeholder="Email..." class="form-control">
+							<input type="text" name="username" placeholder="Username..." class="form-control">
 						</div>
 
 						<div class="input-group mb-2">
