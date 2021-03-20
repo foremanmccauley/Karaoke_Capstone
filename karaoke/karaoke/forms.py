@@ -6,3 +6,6 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+class SearchForm(forms.Form):
+    keywords = forms.CharField(label='Search for a song here', max_length=255)

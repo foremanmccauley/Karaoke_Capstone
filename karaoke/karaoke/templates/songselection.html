@@ -1,4 +1,5 @@
 {% load static %}
+{% load spotify %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,15 @@
     {%include 'navbar.html'%}
     <main>
         <h1>Song Selection</h1>
+        <form method='post'>
+            {% csrf_token %}
+            {{ form }}
+            <!-- <input type="text" id="search terms"></input><br/> -->
+            <button type="submit" name="run_script">Go!</button>
+        </form>
+        {% for message in messages %}
+					<p id="messages">{{message}}</p>
+				{% endfor %}
     </main>
 </body>
 </html>

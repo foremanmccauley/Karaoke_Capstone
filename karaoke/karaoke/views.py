@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import RegistrationForm
+from .forms import RegistrationForm, SearchForm
 
 def index(request):
     return render(request, 'index.html')
@@ -12,7 +12,25 @@ def recording(request):
     return render(request, 'recording.html')
 
 def songselection(request):
-    return render(request, 'songselection.html')
+    keywords = ''
+    form = SearchForm(request.POST or None)
+    if form.is_valid():
+        keywords = form.cleaned_data.get('keywords')
+    else:
+        form = SearchForm()
+    if request.method == 'POST' and 'run_script' in request.POST:
+        from .templatetags.spotify import get_search
+
+        #clearing existing messages
+        msg = messages.get_messages(request)
+        for m in msg:
+            pass
+
+        #calling the search function
+        st = get_search(request, keywords)
+        messages.info(request, st)
+        return redirect('songselection')
+    return render(request, 'songselection.html', {'form': form})
 
 def register(request):
     if request.user.is_authenticated:

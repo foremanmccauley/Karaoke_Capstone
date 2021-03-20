@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'livereload',
+    'karaoke.apps.KaraokeConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'spotify': 'karaoke.templatetags.spotify',
+            }
         },
     },
 ]
