@@ -29,4 +29,7 @@ urlpatterns = [
     path('register',views.register, name="register"),
     path('login',views.loginpage, name="loginpage"),
     path('logout',views.logoutuser, name="logoutuser"),
+    path('profile',views.profile, name="profile"),
+    path('add-friend/<int:id>/', views.send_request, name='add-friend'),
+    path('accept/<int:id>/', views.accept_request, name='accept'),
 ]

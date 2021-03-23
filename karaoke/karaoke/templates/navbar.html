@@ -9,6 +9,8 @@
     <span>{% if request.path == register_url %} Sign Up {% else %}<a href="{% url 'register' %}"> Sign Up</a>{% endif %}</span>
     {% url 'login' as login_url %}
     <span>{% if request.path == login_url %} Log In {% else %}<a href="{% url 'loginpage' %}"> Log In</a>{% endif %}</span>
+    {% url 'login' as login_url %}
+    <span>{% if request.path == login_url %} Profile {% else %}<a href="{% url 'profile' %}"> Profile</a>{% endif %}</span>
     <span> Hello, {{request.user}}</span>
     <span><a href="{% url 'logoutuser' %}">Logout</a></span>
 </div>
