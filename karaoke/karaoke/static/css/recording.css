@@ -1,0 +1,25 @@
+.container {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 2fr 4fr 2fr;
+    grid-template-rows: 100%;
+    grid-gap: 1em;
+}
+
+#col-one {
+    grid-column: 1 / 1;
+    background-color: red;
+    width: 100%;
+}
+
+#col-two {
+    grid-column: 2 / 2;
+    background-color: aqua;
+    width: 100%;
+}
+
+#col-three {
+    grid-column: 3 / 3;
+    background-color: yellow;
+    width: 100%;
+}
