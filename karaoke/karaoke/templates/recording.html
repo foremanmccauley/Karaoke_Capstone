@@ -1,4 +1,5 @@
 {% load static %}
+{% load upload %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,15 @@
     <main>
         <div class="container">
             <div id="col-one">
-                <p>This will be the song selection portion of the page.</p>
+                <h3> Upload your MP3 file here:</h3>
+                <form method='post' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button type="submit" name="run_script">Upload File</button>
+                </form>
+                {% for message in messages %}
+					    <p id="messages">{{message}}</p>
+				    {% endfor %}
             </div>
             <div id="col-two">
                 <p>This will be the recording portion of the page.</p>

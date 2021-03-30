@@ -3,13 +3,29 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import RegistrationForm, SearchForm
+from .forms import RegistrationForm, SearchForm, MP3Form
+from .models import MP3
 
 def index(request):
     return render(request, 'index.html')
 
 def recording(request):
-    return render(request, 'recording.html')
+    form = MP3Form(request.POST, request.FILES)
+    if request.method == 'POST' and 'run_script' in request.POST:
+        if form.is_valid():
+            from .templatetags.upload import upload_file
+            newdoc = MP3(title = form.cleaned_data.get('title'), song = request.FILES['song'])
+            newdoc.save()
+
+            
+            #calling the search function
+            st = upload_file(request)
+            messages.info(request, st)
+
+            return redirect('recording')
+    else:
+        form = MP3Form()
+    return render(request, 'recording.html', {'form': form})
 
 def songselection(request):
     keywords = ''

@@ -16,6 +16,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.join(BASE_DIR, "karaoke")
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "karaoke/templatetags/media")
+MEDIA_URL = "/media/"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -66,6 +69,7 @@ TEMPLATES = [
             ],
             'libraries': {
                 'spotify': 'karaoke.templatetags.spotify',
+                'upload': 'karaoke.templatetags.upload',
             }
         },
     },
