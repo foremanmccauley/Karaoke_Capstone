@@ -10,7 +10,7 @@ from requests import Request, post
 register = template.Library()
 
 @register.simple_tag
-def get_search(request, search_input, limit=5, market="US"):
+def get_search(request, search_input, limit=15, market="US"):
   # can't have pesky spaces in your urls!
   search_input = search_input.replace(' ', '%20')
 
@@ -46,9 +46,24 @@ def get_search(request, search_input, limit=5, market="US"):
                           "Authorization":f"Bearer {access_token}"})
   json_response = response.json()
 
-  st = ""
+  # print(json_response['tracks']['items'])
+
+  st = "<div id=\"cards\" class=\"container\">"
+
+  counter = 0
 
   for i,j in enumerate(json_response['tracks']['items']):
-    st += f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}<br/>"
+    if counter % 3 == 0:
+      if counter != 0:
+        st += "</div>"
+      st += "<div class=\"row\">"
+    st += "<div class=\"col-md-4\">"
+    st += "<div class=\"card\" style=\"width: 18rem;\">" 
+    st += f"<img class=\"card-img-top\" src=\"{j['album']['images'][0]['url']}\"/>"
+    st += "<div class=\"card-body\">"
+    st += f"<p class=\"card-text\"><strong>{j['name']}</strong><br/>by {j['artists'][0]['name']}</p></div></div></div>"
+    counter += 1
+
+  st += "</div></div>"
 
   return mark_safe(st)
