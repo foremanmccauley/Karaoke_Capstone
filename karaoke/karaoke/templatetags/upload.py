@@ -5,4 +5,4 @@ register = template.Library()
 
 @register.simple_tag
 def upload_file(request):
-    return('here')
+    return('Successfully uploaded file')

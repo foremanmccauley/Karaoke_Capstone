@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from .forms import RegistrationForm, SearchForm, MP3Form
 from .models import MP3
 
@@ -14,13 +15,18 @@ def recording(request):
     if request.method == 'POST' and 'run_script' in request.POST:
         if form.is_valid():
             from .templatetags.upload import upload_file
-            newdoc = MP3(title = form.cleaned_data.get('title'), song = request.FILES['song'])
-            newdoc.save()
+            file = request.FILES['song']
+            if file:
+                try:
+                    MP3.validate_audio_file(file)
+                except ValidationError:
+                    messages.error(request, 'Please upload an audio file!')
+                else:
+                    newsong = MP3(title = form.cleaned_data.get('title'), song = file)
+                    newsong.save()
 
-            
-            #calling the search function
-            st = upload_file(request)
-            messages.info(request, st)
+                    st = upload_file(request)
+                    messages.info(request, st)
 
             return redirect('recording')
     else:
