@@ -117,3 +117,6 @@ GitHub.sublime-settings
 karaoke/.DS_Store
 karaoke/karaoke/static/.DS_Store
 karaoke/karaoke/templatetags/credentials.py
+karaoke/karaoke/.DS_Store
+karaoke/db.sqlite3
+karaoke/.DS_Store

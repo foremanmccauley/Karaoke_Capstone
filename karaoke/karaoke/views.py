@@ -3,10 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import RegistrationForm, SearchForm
-from .models import Profile, FriendRequest
+from .forms import RegistrationForm, SearchForm, MP3Form
+from .models import Profile, FriendRequest, MP3
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 
 def index(request):
     return render(request, 'index.html')
@@ -38,7 +39,27 @@ def accept_request(request, id):
     return redirect('profile')
 
 def recording(request):
-    return render(request, 'recording.html')
+    form = MP3Form(request.POST, request.FILES)
+    if request.method == 'POST' and 'run_script' in request.POST:
+        if form.is_valid():
+            from .templatetags.upload import upload_file
+            file = request.FILES['song']
+            if file:
+                try:
+                    MP3.validate_audio_file(file)
+                except ValidationError:
+                    messages.error(request, 'Please upload an audio file!')
+                else:
+                    newsong = MP3(title = form.cleaned_data.get('title'), song = file)
+                    newsong.save()
+
+                    st = upload_file(request)
+                    messages.info(request, st)
+
+            return redirect('recording')
+    else:
+        form = MP3Form()
+    return render(request, 'recording.html', {'form': form})
 
 def songselection(request):
     keywords = ''
