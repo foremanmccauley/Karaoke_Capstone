@@ -8,17 +8,19 @@ from .models import Profile, FriendRequest, MP3
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from .templatetags.credentials import GENIUS_ACCESS
+import requests
 
 def index(request):
     return render(request, 'index.html')
 
 def profile(request):
     if request.user.is_authenticated:
-        user = User.objects.get(pk=request.user.id)           
+        user = User.objects.get(pk=request.user.id)
         allusers=User.objects.exclude(username=request.user)
         fr = FriendRequest.objects.filter(to_user=request.user)
         return render(request, 'profile.html',{'allusers':allusers, 'fr':fr})
-    
+
     else:
         return redirect('index')
 
@@ -59,7 +61,22 @@ def recording(request):
             return redirect('recording')
     else:
         form = MP3Form()
-    return render(request, 'recording.html', {'form': form})
+
+    songdetail = request.GET.get('songdetail')
+    if songdetail is None:
+        songdetail = ''
+    url = f"https://api.genius.com/search?q={songdetail}&access_token={GENIUS_ACCESS}"
+    response = requests.get(url)
+    data = response.json()
+
+    hits = data['response']['hits']
+
+    context = {
+        'hits' : hits
+    }
+
+    context.update({'form' : form})
+    return render(request, 'recording.html', context)
 
 def songselection(request):
     keywords = ''
