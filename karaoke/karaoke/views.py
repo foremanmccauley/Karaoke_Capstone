@@ -29,6 +29,8 @@ def send_request(request, id):
 
 def accept_request(request, id):
     frequest=FriendRequest.objects.get(id=id)
+    frequest.is_active = False
+    frequest.save()
     user1=User.objects.get(pk=request.user.id)
     user2=User.objects.get(pk=frequest.from_user.id)
     user1.profile.friends.add(user2.profile)

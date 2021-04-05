@@ -13,6 +13,7 @@ class Profile(models.Model):
 class FriendRequest(models.Model):
     from_user=models.ForeignKey(User, related_name="from_user",on_delete=models.CASCADE)
     to_user=models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+    is_active=models.BooleanField(default=True)
 
     def __str__(self):
         return self.from_user.username + " to " + self.to_user.username

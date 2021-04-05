@@ -14,8 +14,9 @@
         </br>
         <h2> Friend Requests </h2>
         {% for r in fr %}
-
-        <a href="{% url 'accept' r.id %}"> Accept {{r.from_user}} </a>
+            {% if r.is_active == True %}
+                <a href="{% url 'accept' r.id %}"> Accept {{r.from_user}} </a>
+            {%endif%}
         {%endfor%}
 
         <h2> Friends </h2>
@@ -23,7 +24,11 @@
         
         <h2> Other Users </h2>
         {% for user in allusers %}
-        <a href="{% url 'add-friend' user.id %}"> {{user}} +</a>
+            {%for profile in user.profile.friends.all%}
+                {% if user.username != profile.username%}
+                    <a href="{% url 'add-friend' user.id %}"> {{user}} +</a>
+                {% endif %}
+            {% endfor %}
         {%endfor%}
 
     </main>
