@@ -8,8 +8,10 @@
 
 #col-one {
     grid-column: 1 / 1;
-    background-color: red;
+    background-color: darkred;
+    color: white;
     width: 100%;
+    justify-content: left;
 }
 
 #col-two {
