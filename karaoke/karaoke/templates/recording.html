@@ -26,6 +26,27 @@
             </div>
             <div id="col-two">
                 <p>This will be the recording portion of the page.</p>
+                <div class="left">
+                    <div id="startButton" class="button">
+                      Start
+                    </div>
+                    <h2>Preview</h2>
+                    <video id="preview" width="160" height="120" autoplay muted></video>
+                  </div>
+                  <div class="right">
+                    <div id="stopButton" class="button">
+                      Stop
+                    </div>
+                    <h2>Recording</h2>
+                    <video id="recording" width="160" height="120" controls></video>
+                    <a id="downloadButton" class="button">
+                      Download
+                    </a>
+                  </div>
+                  <div class ="bottom">
+                      <pre id="log"></pre>
+                  </div>
+                   
             </div>
             <div id="col-three">
                 <p>This will be the invite friends portion of the page.</p>
@@ -45,6 +66,9 @@
         </div>
         {% endfor %}
     </main>
+    
+<script src="{% static 'js/recording.js' %}"async></script>
+
 </body>
 {%include 'footer.html'%}
 </html>
