@@ -46,7 +46,7 @@
                   <div class ="bottom">
                       <pre id="log"></pre>
                   </div>
-                   
+
             </div>
             <div id="col-three">
                 <p>This will be the invite friends portion of the page.</p>
@@ -58,15 +58,11 @@
           <button type="submit" value="Go">Go!</button>
         </form>
         {% for i in hits %}
-        <div class="card" style="width: 18rem;">
-          <img src="{{ i.result.song_art_image_thumbnail_url }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <p class="card-text"><a href="{{ i.result.url }}" target="_blank" rel="noopener noreferrer">{{ i.result.url }}</a></p>
-          </div>
-        </div>
+          <img src="{{ i.result.song_art_image_thumbnail_url }}">
+          <p><a href="{{ i.result.url }}" target="_blank" rel="noopener noreferrer">{{ i.result.url }}</a></p>
         {% endfor %}
     </main>
-    
+
 <script src="{% static 'js/recording.js' %}"async></script>
 
 </body>
