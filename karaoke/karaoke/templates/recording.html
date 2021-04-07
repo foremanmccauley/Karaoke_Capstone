@@ -37,7 +37,12 @@
           <button type="submit" value="Go">Go!</button>
         </form>
         {% for i in hits %}
-        <p><a href="{{ i.result.url }}" target="_blank" rel="noopener noreferrer">{{ i.result.url }}</a></p>
+        <div class="card" style="width: 18rem;">
+          <img src="{{ i.result.song_art_image_thumbnail_url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text"><a href="{{ i.result.url }}" target="_blank" rel="noopener noreferrer">{{ i.result.url }}</a></p>
+          </div>
+        </div>
         {% endfor %}
     </main>
 </body>
