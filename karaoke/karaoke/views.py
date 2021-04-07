@@ -14,10 +14,10 @@ def index(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        user = User.objects.get(pk=request.user.id)           
-        allusers=User.objects.exclude(username=request.user)
+        requestProfile = Profile.objects.get(pk=request.user.id)           
+        allprofiles=Profile.objects.exclude(pk=request.user.id)
         fr = FriendRequest.objects.filter(to_user=request.user)
-        return render(request, 'profile.html',{'allusers':allusers, 'fr':fr})
+        return render(request, 'profile.html',{'allprofiles':allprofiles, 'fr':fr, 'requestProfile':requestProfile})
     
     else:
         return redirect('index')
