@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegistrationForm, SearchForm, MP3Form
-from .models import Profile, FriendRequest, MP3
+from .models import Profile, FriendRequest, MP3, MP4
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -45,7 +45,8 @@ def recording(request):
     if request.method == 'POST' and 'run_script' in request.POST:
         if form.is_valid():
             from .templatetags.upload import upload_file
-            file = request.FILES['song']
+            #file = request.FILES['song']
+            file = request.FILES.get('song', False)
             if file:
                 try:
                     MP3.validate_audio_file(file)
@@ -57,6 +58,20 @@ def recording(request):
 
                     st = upload_file(request)
                     messages.info(request, st)
+
+            #return redirect('recording')
+            file2 = request.FILES.get('video', False)
+            if file2:
+                try:
+                    MP4.validate_video_file(file2)
+                except ValidationError:
+                    messages.error(request, 'Please upload an video file!')
+                else:
+                    newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
+                    newsong.save()
+
+                    st2 = upload_file(request)
+                    messages.info(request, st2)
 
             return redirect('recording')
     else:

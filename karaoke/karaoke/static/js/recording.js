@@ -5,14 +5,14 @@ let stopButton = document.getElementById("stopButton");
 let downloadButton = document.getElementById("downloadButton");
 let logElement = document.getElementById("log");
 
-let recordingTimeMS = 5000;
+let recordingTimeMS = 10000;
 
 function log(msg) {
     logElement.innerHTML += msg + "\n";
   }
 
 function wait(delayInMS) {
-    return new Promise(resolve => setTimeout(resolve, delayInMS));
+    //return new Promise(resolve => setTimeout(resolve, delayInMS));
   }
 
 function startRecording(stream, lengthInMS) {
@@ -21,20 +21,22 @@ function startRecording(stream, lengthInMS) {
   
     recorder.ondataavailable = event => data.push(event.data);
     recorder.start();
-    log(recorder.state + " for " + (lengthInMS/1000) + " seconds...");
+    //log(recorder.state + "! for " + (lengthInMS/1000) + " seconds...");
+      log(recorder.state + "!");
+
   
     let stopped = new Promise((resolve, reject) => {
       recorder.onstop = resolve;
       recorder.onerror = event => reject(event.name);
     });
   
-    let recorded = wait(lengthInMS).then(
-      () => recorder.state == "recording" && recorder.stop()
-    );
+    //let recorded = wait(lengthInMS).then(
+    //  () => recorder.state == "recording" && recorder.stop()
+   // );
   
     return Promise.all([
       stopped,
-      recorded
+      //recorded
     ])
     .then(() => data);
   }
@@ -55,13 +57,14 @@ startButton.addEventListener("click", function() {
       return new Promise(resolve => preview.onplaying = resolve);
     }).then(() => startRecording(preview.captureStream(), recordingTimeMS))
     .then (recordedChunks => {
-      let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+      let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
       recording.src = URL.createObjectURL(recordedBlob);
       downloadButton.href = recording.src;
-      downloadButton.download = "RecordedVideo.webm";
+      downloadButton.download = "karaokevideo.mp4";
   
-      log("Successfully recorded " + recordedBlob.size + " bytes of " +
-          recordedBlob.type + " media.");
+      //log("Successfully recorded " + recordedBlob.size + " bytes of " +
+         // recordedBlob.type + " media.");
+         log("Successfully recorded ");
     })
     .catch(log);
   }, false);
@@ -69,4 +72,5 @@ startButton.addEventListener("click", function() {
 
 stopButton.addEventListener("click", function() {
     stop(preview.srcObject);
+    
   }, false);

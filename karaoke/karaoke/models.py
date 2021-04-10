@@ -31,3 +31,13 @@ class MP3(models.Model):
     def __str__(self):
         return self.title
 
+class MP4(models.Model):
+    def validate_video_file(val):
+        if 'video' not in val.content_type:
+            raise ValidationError('Please only video files please!')
+
+    title = models.CharField(max_length=250)
+    video = models.FileField(validators=[validate_video_file])
+
+    def __str__(self):
+        return self.title

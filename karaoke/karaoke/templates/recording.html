@@ -13,41 +13,44 @@
     {%include 'navbar.html'%}
     <main>
         <div class="container">
-            <div id="col-one">
-                <h3> Upload your song file here:</h3>
+          <div id="col-one">
+            <p>This will be the recording portion of the page.</p>
+            <div class="left">
+                <div id="startButton" class="button">
+                  Start
+                </div>
+                <h2>Preview</h2>
+                <video id="preview" width="160" height="120" autoplay muted></video>
+              </div>
+              <div class="right">
+                <div id="stopButton" class="button">
+                  Stop
+                </div>
+                <h2>Recording</h2>
+                <video id="recording" width="160" height="120" controls></video>
+                <a id="downloadButton" class="button">
+                  Download
+                </a>
+              </div>
+              <div class ="bottom">
+                  <pre id="log"></pre>
+              </div>
+        </div>
+            <div id="col-two">
+                <h3> Upload your files here:</h3>
                 <form method='post' enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form }}
-                    <button type="submit" name="run_script">Upload File</button>
+                    
+                    <button type="submit" name="run_script">Upload Files</button>
+                      
+                  
                 </form>
                 {% for message in messages %}
 					    <p id="messages">{{message}}</p>
 				    {% endfor %}
             </div>
-            <div id="col-two">
-                <p>This will be the recording portion of the page.</p>
-                <div class="left">
-                    <div id="startButton" class="button">
-                      Start
-                    </div>
-                    <h2>Preview</h2>
-                    <video id="preview" width="160" height="120" autoplay muted></video>
-                  </div>
-                  <div class="right">
-                    <div id="stopButton" class="button">
-                      Stop
-                    </div>
-                    <h2>Recording</h2>
-                    <video id="recording" width="160" height="120" controls></video>
-                    <a id="downloadButton" class="button">
-                      Download
-                    </a>
-                  </div>
-                  <div class ="bottom">
-                      <pre id="log"></pre>
-                  </div>
-
-            </div>
+            
             <div id="col-three">
                 <p>This will be the invite friends portion of the page.</p>
             </div>
