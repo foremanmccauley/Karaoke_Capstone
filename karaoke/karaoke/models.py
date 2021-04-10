@@ -6,8 +6,9 @@ from mimetypes import guess_type
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    friends = models.ManyToManyField('Profile', blank=True)
-    newAccount = models.BooleanField(default=True)
+    friends = models.ManyToManyField('Profile', related_name = "friends_set", blank=True)
+    group = models.ManyToManyField('Profile', related_name = "group_set", blank=True)
+    is_group_parent = models.BooleanField(default=False)
     
     def __str__(self):
         return self.user.username
@@ -15,6 +16,14 @@ class Profile(models.Model):
 class FriendRequest(models.Model):
     from_user=models.ForeignKey(User, related_name="from_user",on_delete=models.CASCADE)
     to_user=models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+    is_active=models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.from_user.username + " to " + self.to_user.username
+
+class GroupRequest(models.Model):
+    from_user=models.ForeignKey(User, related_name="from_user_grp",on_delete=models.CASCADE)
+    to_user=models.ForeignKey(User, related_name='to_user_grp', on_delete=models.CASCADE)
     is_active=models.BooleanField(default=True)
 
     def __str__(self):
