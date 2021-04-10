@@ -37,12 +37,13 @@
               </div>
         </div>
             <div id="col-two">
-                <h3> Upload your song file here:</h3>
+                <h3> Upload your files here:</h3>
                 <form method='post' enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form }}
-                    <button type="submit" name="run_script">Upload MP3 File</button>
-                  
+                    
+                    <button type="submit" name="run_script">Upload Files</button>
+                      
                   
                 </form>
                 {% for message in messages %}
