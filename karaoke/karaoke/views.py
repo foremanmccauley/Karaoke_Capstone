@@ -16,8 +16,8 @@ def index(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        requestProfile = Profile.objects.get(pk=request.user.id)           
-        allprofiles=Profile.objects.exclude(pk=request.user.id)
+        requestProfile = Profile.objects.get(user=request.user)           
+        allprofiles=Profile.objects.exclude(user=request.user)
         fr = FriendRequest.objects.filter(to_user=request.user)
         return render(request, 'profile.html',{'allprofiles':allprofiles, 'fr':fr, 'requestProfile':requestProfile})
     
