@@ -14,19 +14,19 @@
     <main>
         <div class="container">
           <div id="col-one">
-            <p>This will be the recording portion of the page.</p>
+            <h2>Record!</h2>
             <div class="left">
                 <div id="startButton" class="button">
                   Start
                 </div>
-                <h2>Preview</h2>
+                <h3>Preview</h3>
                 <video id="preview" width="160" height="120" autoplay muted></video>
               </div>
               <div class="right">
                 <div id="stopButton" class="button">
                   Stop
                 </div>
-                <h2>Recording</h2>
+                <h3>Recording</h3>
                 <video id="recording" width="160" height="120" controls></video>
                 <a id="downloadButton" class="button">
                   Download
@@ -37,12 +37,12 @@
               </div>
         </div>
             <div id="col-two">
-                <h3> Upload your files here:</h3>
+                <h2> Upload Files</h2>
                 <form method='post' enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form }}
                     
-                    <button type="submit" name="run_script">Upload Files</button>
+                    <button type="submit" name="run_script" class = 'button'>Upload Files</button>
                       
                   
                 </form>
@@ -52,7 +52,7 @@
             </div>
             
             <div id="col-three">
-                <p>This will be the invite friends portion of the page.</p>
+                <h2>Friends</h2>
             </div>
         </div>
         <h2> Search for song lyrics by title or artist: </h2>
@@ -74,11 +74,9 @@
 <script>
   // Get the elements with class="column"
   var elements = document.getElementsByClassName("column");
-  
-  // Declare a loop variable
   var i;
   for (i = 0; i < elements.length; i++) {
-    elements[i].style.msFlex = "25%";  // IE10
+    elements[i].style.msFlex = "25%"; 
     elements[i].style.flex = "25%";
   }
 </script>
