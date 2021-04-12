@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegistrationForm, SearchForm, MP3Form
-from .models import Profile, FriendRequest, MP3, MP4
+from .models import Profile, FriendRequest, MP3, GroupRequest, MP4
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -16,21 +16,36 @@ def index(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        user = User.objects.get(pk=request.user.id)
-        allusers=User.objects.exclude(username=request.user)
+        requestProfile = Profile.objects.get(user=request.user)           
+        allprofiles=Profile.objects.exclude(user=request.user)
         fr = FriendRequest.objects.filter(to_user=request.user)
-        return render(request, 'profile.html',{'allusers':allusers, 'fr':fr})
-
+        gr = GroupRequest.objects.filter(to_user=request.user)
+        count = 0
+        in_group = False
+        for profile in requestProfile.group.all():
+            count = count + 1
+            print(profile)
+        print("test")
+        if count > 0:
+            in_group = True
+        return render(request, 'profile.html',{'allprofiles':allprofiles, 'fr':fr, 'requestProfile':requestProfile, 'in_group':in_group, 'gr':gr})
+    
     else:
         return redirect('index')
 
-def send_request(request, id):
+def send_friend_request(request, id):
     from_user=request.user
     to_user=User.objects.get(id=id)
     frequest=FriendRequest.objects.get_or_create(from_user=from_user,to_user=to_user)
     return redirect('profile')
 
-def accept_request(request, id):
+def send_group_request(request, id):
+    from_user=request.user
+    to_user=User.objects.get(id=id)
+    grprequest=GroupRequest.objects.get_or_create(from_user=from_user,to_user=to_user)
+    return redirect('profile')
+
+def accept_friend_request(request, id):
     frequest=FriendRequest.objects.get(id=id)
     frequest.is_active = False
     frequest.save()
@@ -38,6 +53,16 @@ def accept_request(request, id):
     user2=User.objects.get(pk=frequest.from_user.id)
     user1.profile.friends.add(user2.profile)
     user2.profile.friends.add(user1.profile)
+    return redirect('profile')
+
+def accept_group_request(request, id):
+    grprequest=GroupRequest.objects.get(id=id)
+    grprequest.is_active = False
+    grprequest.save()
+    user1=User.objects.get(pk=request.user.id)
+    user2=User.objects.get(pk=grprequest.from_user.id)
+    user1.profile.group.add(user2.profile)
+    user2.profile.group.add(user1.profile)
     return redirect('profile')
 
 def recording(request):

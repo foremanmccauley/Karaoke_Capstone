@@ -15,21 +15,47 @@
         <h2> Friend Requests </h2>
         {% for r in fr %}
             {% if r.is_active == True %}
-                <a href="{% url 'accept' r.id %}"> Accept {{r.from_user}} </a>
+                <a href="{% url 'accept_friend' r.id %}"> Accept {{r.from_user}} </a>
             {%endif%}
         {%endfor%}
 
         <h2> Friends </h2>
-        {{user.profile.friends.all}}
+        {% for profile in requestProfile.friends.all %}
+            {% if profile.user.username != request.user.username %}
+                {{profile}}
+            {% endif %} 
+        {%endfor%}
         
-        <h2> Other Users </h2>
-        {% for user in allusers %}
-            {%for profile in user.profile.friends.all%}
-                {% if user.username != profile.username%}
-                    <a href="{% url 'add-friend' user.id %}"> {{user}} +</a>
+        <h2> Click a profile to send a friend request... </h2>
+        {% for profile in allprofiles %}
+            {% if profile not in requestProfile.friends.all %}
+                <a href="{% url 'add-friend' profile.id %}"> {{profile}} +</a>     
+            {% endif %}
+        {%endfor%}
+
+        {% if in_group %} 
+            <h2> These are your group members... </h2>
+            {% for profile in requestProfile.group.all %}
+                {% if profile.user.username != request.user.username %}
+                    {{profile}}
                 {% endif %}
             {% endfor %}
-        {%endfor%}
+        {% else %} 
+            <h2> Start a group with your friends! </h2>
+            {% for profile in requestProfile.friends.all %}
+                {% if profile not in requestProfile.group.all %}
+                    <a href="{% url 'add-group-member' profile.id %}"> {{profile}} +</a>     
+                {% endif %}
+            {%endfor%}
+            <h2> You can also join a group that your friends have already created! </h2>
+            {% for r in gr %}
+                {% if r.is_active == True %}
+                    <a href="{% url 'accept_group_member' r.id %}"> Accept {{r.from_user}} </a>
+                {%endif%}
+            {%endfor%}
+        {% endif %}
+
+        
 
     </main>
 </body>
