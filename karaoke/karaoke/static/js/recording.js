@@ -4,6 +4,7 @@ let startButton = document.getElementById("startButton");
 let stopButton = document.getElementById("stopButton");
 let downloadButton = document.getElementById("downloadButton");
 let logElement = document.getElementById("log");
+let audio = document.getElementsByTagName("audio")[0];
 
 let recordingTimeMS = 10000;
 
@@ -20,6 +21,7 @@ function startRecording(stream, lengthInMS) {
     let data = [];
   
     recorder.ondataavailable = event => data.push(event.data);
+    audio.play();
     recorder.start();
     //log(recorder.state + "! for " + (lengthInMS/1000) + " seconds...");
       log(recorder.state + "!");
@@ -44,6 +46,7 @@ function startRecording(stream, lengthInMS) {
 
 function stop(stream) {
     stream.getTracks().forEach(track => track.stop());
+    audio.pause();
   }
 
 startButton.addEventListener("click", function() {

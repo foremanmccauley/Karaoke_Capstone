@@ -87,6 +87,7 @@ def recording(request):
                     f_name = 'static/media/' + newsong.song.name
                     st = upload_file(request, f_name)
                     messages.info(request, st)
+                    messages.info(request, 'File successfully uploaded!')
 
             #return redirect('recording')
             file2 = request.FILES.get('video', False)

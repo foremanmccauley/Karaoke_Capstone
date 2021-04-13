@@ -6,6 +6,6 @@ register = template.Library()
 
 @register.simple_tag
 def upload_file(request, f):
-    ret = '<audio controls src=' + f
+    ret = '<audio src=' + f
     ret += '> Your browser does not support the <code>audio</code> element.</audio>'
     return mark_safe(ret)
