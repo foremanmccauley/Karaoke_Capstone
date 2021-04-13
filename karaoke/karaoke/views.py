@@ -81,7 +81,11 @@ def recording(request):
                     newsong = MP3(title = form.cleaned_data.get('title'), song = file)
                     newsong.save()
 
-                    st = upload_file(request)
+                    # f_name is passed in to the upload function for playback purposes
+                    # upload_file (in upload.py) could be modified to add the filepath to the group database
+                    # may need to later pass the user information in (for group purposes)
+                    f_name = 'static/media/' + newsong.song.name
+                    st = upload_file(request, f_name)
                     messages.info(request, st)
 
             #return redirect('recording')
