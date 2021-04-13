@@ -21,7 +21,8 @@ function startRecording(stream, lengthInMS) {
     let data = [];
   
     recorder.ondataavailable = event => data.push(event.data);
-    audio.play();
+    if (audio)
+      audio.play();
     recorder.start();
     //log(recorder.state + "! for " + (lengthInMS/1000) + " seconds...");
       log(recorder.state + "!");
@@ -46,7 +47,8 @@ function startRecording(stream, lengthInMS) {
 
 function stop(stream) {
     stream.getTracks().forEach(track => track.stop());
-    audio.pause();
+    if (audio)
+      audio.pause();
   }
 
 startButton.addEventListener("click", function() {
