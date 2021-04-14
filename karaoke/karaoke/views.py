@@ -118,7 +118,8 @@ def recording(request):
                         requestProfile.mp4name = newsong.video.name
                         requestProfile.save()
 
-                        st2 = upload_file(request)
+                        f_name = 'static/media/' + newsong.video.name
+                        st2 = upload_file(request, f_name)
                         messages.info(request, st2)
 
                 return redirect('recording')#, {'requestProfile' : requestProfile})
