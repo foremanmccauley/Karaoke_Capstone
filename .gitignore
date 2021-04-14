@@ -120,3 +120,4 @@ karaoke/karaoke/templatetags/credentials.py
 karaoke/karaoke/.DS_Store
 karaoke/db.sqlite3
 karaoke/.DS_Store
+karaoke/test.mp4
