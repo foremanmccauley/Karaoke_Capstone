@@ -88,7 +88,7 @@ def recording(request):
                     except ValidationError:
                         messages.error(request, 'Please upload an audio file!')
                     else:
-                        newsong = MP3(title = form.cleaned_data.get('title'), song = file)
+                        newsong = MP3(song = file)
                         newsong.save()
 
                         #attach the mp3 to the user's profile
@@ -111,7 +111,7 @@ def recording(request):
                     except ValidationError:
                         messages.error(request, 'Please upload an video file!')
                     else:
-                        newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
+                        newsong = MP4(video = file2)
                         newsong.save()
 
                         #attach the mp4 to the user's profile
@@ -121,7 +121,7 @@ def recording(request):
                         st2 = upload_file(request)
                         messages.info(request, st2)
 
-                return redirect('recording', {'requestProfile' : requestProfile})
+                return redirect('recording')#, {'requestProfile' : requestProfile})
         else:
             form = MP3Form()
 
