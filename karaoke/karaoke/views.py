@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegistrationForm, SearchForm, MP3Form
-from .models import Profile, FriendRequest, MP3, MP4
+from .models import Profile, FriendRequest, MP3, GroupRequest, MP4
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -16,21 +16,34 @@ def index(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        user = User.objects.get(pk=request.user.id)
-        allusers=User.objects.exclude(username=request.user)
+        requestProfile = Profile.objects.get(user=request.user)           
+        allprofiles=Profile.objects.exclude(user=request.user)
         fr = FriendRequest.objects.filter(to_user=request.user)
-        return render(request, 'profile.html',{'allusers':allusers, 'fr':fr})
-
+        gr = GroupRequest.objects.filter(to_user=request.user)
+        count = 0
+        in_group = False
+        for profile in requestProfile.group.all():
+            count = count + 1
+        if count > 0:
+            in_group = True
+        return render(request, 'profile.html',{'allprofiles':allprofiles, 'fr':fr, 'requestProfile':requestProfile, 'in_group':in_group, 'gr':gr})
+    
     else:
         return redirect('index')
 
-def send_request(request, id):
+def send_friend_request(request, id):
     from_user=request.user
     to_user=User.objects.get(id=id)
     frequest=FriendRequest.objects.get_or_create(from_user=from_user,to_user=to_user)
     return redirect('profile')
 
-def accept_request(request, id):
+def send_group_request(request, id):
+    from_user=request.user
+    to_user=User.objects.get(id=id)
+    grprequest=GroupRequest.objects.get_or_create(from_user=from_user,to_user=to_user)
+    return redirect('profile')
+
+def accept_friend_request(request, id):
     frequest=FriendRequest.objects.get(id=id)
     frequest.is_active = False
     frequest.save()
@@ -40,58 +53,96 @@ def accept_request(request, id):
     user2.profile.friends.add(user1.profile)
     return redirect('profile')
 
+def accept_group_request(request, id):
+    grprequest=GroupRequest.objects.get(id=id)
+    grprequest.is_active = False
+    grprequest.save()
+    user1=User.objects.get(pk=request.user.id)
+
+    user1.profile.is_group_parent = False #they accepted a request, so they cannot be the group parent
+    user1.save()
+
+    user2=User.objects.get(pk=grprequest.from_user.id)
+
+    user1.profile.group.add(user2.profile)
+    user2.profile.group.add(user1.profile)
+
+    for profile in user2.profile.group.all():
+        if profile not in user1.profile.group.all():
+            user1.profile.group.add(profile)
+
+    return redirect('profile')
+
 def recording(request):
-    form = MP3Form(request.POST, request.FILES)
-    if request.method == 'POST' and 'run_script' in request.POST:
-        if form.is_valid():
-            from .templatetags.upload import upload_file
-            #file = request.FILES['song']
-            file = request.FILES.get('song', False)
-            if file:
-                try:
-                    MP3.validate_audio_file(file)
-                except ValidationError:
-                    messages.error(request, 'Please upload an audio file!')
-                else:
-                    newsong = MP3(title = form.cleaned_data.get('title'), song = file)
-                    newsong.save()
+    if request.user.is_authenticated:
+        requestProfile = Profile.objects.get(user=request.user)
+        form = MP3Form(request.POST, request.FILES)
+        if request.method == 'POST' and 'run_script' in request.POST:
+            if form.is_valid():
+                from .templatetags.upload import upload_file
+                #file = request.FILES['song']
+                file = request.FILES.get('song', False)
+                if file:
+                    try:
+                        MP3.validate_audio_file(file)
+                    except ValidationError:
+                        messages.error(request, 'Please upload an audio file!')
+                    else:
+                        newsong = MP3(title = form.cleaned_data.get('title'), song = file)
+                        newsong.save()
 
-                    st = upload_file(request)
-                    messages.info(request, st)
+                        #attach the mp3 to the user's profile
+                        requestProfile.mp3name = newsong.song.name
+                        requestProfile.save()
 
-            #return redirect('recording')
-            file2 = request.FILES.get('video', False)
-            if file2:
-                try:
-                    MP4.validate_video_file(file2)
-                except ValidationError:
-                    messages.error(request, 'Please upload an video file!')
-                else:
-                    newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
-                    newsong.save()
+                        # f_name is passed in to the upload function for playback purposes
+                        # upload_file (in upload.py) could be modified to add the filepath to the group database
+                        # may need to later pass the user information in (for group purposes)
+                        f_name = 'static/media/' + newsong.song.name
+                        st = upload_file(request, f_name)
+                        messages.info(request, st)
+                        messages.info(request, 'File successfully uploaded!')
 
-                    st2 = upload_file(request)
-                    messages.info(request, st2)
+                #return redirect('recording')
+                file2 = request.FILES.get('video', False)
+                if file2:
+                    try:
+                        MP4.validate_video_file(file2)
+                    except ValidationError:
+                        messages.error(request, 'Please upload an video file!')
+                    else:
+                        newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
+                        newsong.save()
 
-            return redirect('recording')
+                        #attach the mp4 to the user's profile
+                        requestProfile.mp4name = newsong.video.name
+                        requestProfile.save()
+
+                        st2 = upload_file(request)
+                        messages.info(request, st2)
+
+                return redirect('recording', {'requestProfile' : requestProfile})
+        else:
+            form = MP3Form()
+
+        songdetail = request.GET.get('songdetail')
+        if songdetail is None:
+            songdetail = ''
+        url = f"https://api.genius.com/search?q={songdetail}&access_token={GENIUS_ACCESS}"
+        response = requests.get(url)
+        data = response.json()
+
+        hits = data['response']['hits']
+
+        context = {
+            'hits' : hits,
+            'requestProfile' : requestProfile
+        }
+
+        context.update({'form' : form})
+        return render(request, 'recording.html', context)
     else:
-        form = MP3Form()
-
-    songdetail = request.GET.get('songdetail')
-    if songdetail is None:
-        songdetail = ''
-    url = f"https://api.genius.com/search?q={songdetail}&access_token={GENIUS_ACCESS}"
-    response = requests.get(url)
-    data = response.json()
-
-    hits = data['response']['hits']
-
-    context = {
-        'hits' : hits
-    }
-
-    context.update({'form' : form})
-    return render(request, 'recording.html', context)
+        return redirect('profile')
 
 def songselection(request):
     keywords = ''

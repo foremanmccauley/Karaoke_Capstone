@@ -53,6 +53,15 @@
             
             <div id="col-three">
                 <h2>Friends</h2>
+                {% for profile in requestProfile.friends.all %}
+                  {{ profile }}
+                  </br>
+                {% endfor %}
+                <h2>Group Members</h2>
+                {% for profile in requestProfile.group.all%}
+                  {{ profile }}
+                  </br>
+                {% endfor %}
             </div>
         </div>
         <h2> Search for song lyrics by title or artist: </h2>

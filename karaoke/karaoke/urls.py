@@ -29,6 +29,8 @@ urlpatterns = [
     path('login',views.loginpage, name="loginpage"),
     path('logout',views.logoutuser, name="logoutuser"),
     path('profile',views.profile, name="profile"),
-    path('add-friend/<int:id>/', views.send_request, name='add-friend'),
-    path('accept/<int:id>/', views.accept_request, name='accept'),
+    path('add-friend/<int:id>/', views.send_friend_request, name='add-friend'),
+    path('accept_friend/<int:id>/', views.accept_friend_request, name='accept_friend'),
+    path('add-group-member/<int:id>/', views.send_group_request, name='add-group-member'),
+    path('accept_group_member/<int:id>/', views.accept_group_request, name='accept_group_member'),
 ]
