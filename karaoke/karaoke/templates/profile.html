@@ -33,21 +33,29 @@
             {% endif %}
         {%endfor%}
 
-        {% if in_group %} 
+        {% if in_group %}
             <h2> These are your group members... </h2>
             {% for profile in requestProfile.group.all %}
                 {% if profile.user.username != request.user.username %}
                     {{profile}}
                 {% endif %}
             {% endfor %}
-        {% else %} 
+            {% if requestProfile.is_group_parent%}
+                  <h2> Invite more members to your group! </h2>
+                  {% for profile in requestProfile.friends.all %}
+                      {% if profile not in requestProfile.group.all %}
+                          <a href="{% url 'add-group-member' profile.id %}"> {{profile}} +</a>     
+                      {% endif %}
+                  {%endfor%}
+            {% endif %}
+        {% else %}
             <h2> Start a group with your friends! </h2>
             {% for profile in requestProfile.friends.all %}
                 {% if profile not in requestProfile.group.all %}
                     <a href="{% url 'add-group-member' profile.id %}"> {{profile}} +</a>     
                 {% endif %}
             {%endfor%}
-            <h2> You can also join a group that your friends have already created! </h2>
+            <h2> You can also join a group that you have been invited to! </h2>
             {% for r in gr %}
                 {% if r.is_active == True %}
                     <a href="{% url 'accept_group_member' r.id %}"> Accept {{r.from_user}} </a>

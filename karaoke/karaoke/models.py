@@ -8,7 +8,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     friends = models.ManyToManyField('Profile', related_name = "friends_set", blank=True)
     group = models.ManyToManyField('Profile', related_name = "group_set", blank=True)
-    is_group_parent = models.BooleanField(default=False)
+    is_group_parent = models.BooleanField(default=True)
+    mp3name = models.CharField(max_length=100, blank=True)
+    mp4name = models.CharField(max_length=100, blank=True) 
     
     def __str__(self):
         return self.user.username
