@@ -68,6 +68,7 @@ TEMPLATES = [
             'libraries': {
                 'spotify': 'karaoke.templatetags.spotify',
                 'upload': 'karaoke.templatetags.upload',
+                'composite': 'karaoke.templatetags.composite',
             }
         },
     },

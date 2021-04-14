@@ -145,6 +145,12 @@ def recording(request):
     else:
         return redirect('profile')
 
+def composite(request):
+    if request.method == 'POST' and 'run_script' in request.POST:
+        from .templatetags.composite import comp
+        comp(request)
+    return render(request, 'composite.html')
+
 def songselection(request):
     keywords = ''
     form = SearchForm(request.POST or None)
