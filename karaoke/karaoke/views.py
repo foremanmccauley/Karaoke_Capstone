@@ -74,70 +74,44 @@ def accept_group_request(request, id):
     return redirect('profile')
 
 def recording(request):
-    if request.user.is_authenticated:
-        requestProfile = Profile.objects.get(user=request.user)
-        form = MP3Form(request.POST, request.FILES)
-        if request.method == 'POST' and 'run_script' in request.POST:
-            if form.is_valid():
-                from .templatetags.upload import upload_file
-                #file = request.FILES['song']
-                file = request.FILES.get('song', False)
-                if file:
-                    try:
-                        MP3.validate_audio_file(file)
-                    except ValidationError:
-                        messages.error(request, 'Please upload an audio file!')
-                    else:
-                        newsong = MP3(title = form.cleaned_data.get('title'), song = file)
-                        newsong.save()
+    form = MP3Form(request.POST, request.FILES)
+    if request.method == 'POST' and 'run_script' in request.POST:
+        if form.is_valid():
+            from .templatetags.upload import upload_file
+            #file = request.FILES['song']
+            file = request.FILES.get('song', False)
+            if file:
+                try:
+                    MP3.validate_audio_file(file)
+                except ValidationError:
+                    messages.error(request, 'Please upload an audio file!')
+                else:
+                    newsong = MP3(title = form.cleaned_data.get('title'), song = file)
+                    newsong.save()
 
-                        #attach the mp3 to the user's profile
-                        requestProfile.mp3name = newsong.song.name
-                        requestProfile.save()
+                    # f_name is passed in to the upload function for playback purposes
+                    # upload_file (in upload.py) could be modified to add the filepath to the group database
+                    # may need to later pass the user information in (for group purposes)
+                    f_name = 'static/media/' + newsong.song.name
+                    st = upload_file(request, f_name)
+                    messages.info(request, st)
+                    messages.info(request, 'File successfully uploaded!')
 
+            #return redirect('recording')
+            file2 = request.FILES.get('video', False)
+            if file2:
+                try:
+                    MP4.validate_video_file(file2)
+                except ValidationError:
+                    messages.error(request, 'Please upload an video file!')
+                else:
+                    newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
+                    newsong.save()
 
-                        st = upload_file(request)
-                        messages.info(request, st)
+                    st2 = upload_file(request)
+                    messages.info(request, st2)
 
-                #return redirect('recording')
-                file2 = request.FILES.get('video', False)
-                if file2:
-                    try:
-                        MP4.validate_video_file(file2)
-                    except ValidationError:
-                        messages.error(request, 'Please upload an video file!')
-                    else:
-                        newsong = MP4(title = form.cleaned_data.get('title2'), video = file2)
-                        newsong.save()
-
-                        #attach the mp4 to the user's profile
-                        requestProfile.mp4name = newsong.video.name
-                        requestProfile.save()
-
-                        st2 = upload_file(request)
-                        messages.info(request, st2)
-
-                
-                
-                return redirect('recording', {'requestProfile' : requestProfile})
-        else:
-            form = MP3Form()
-
-        songdetail = request.GET.get('songdetail')
-        if songdetail is None:
-            songdetail = ''
-        url = f"https://api.genius.com/search?q={songdetail}&access_token={GENIUS_ACCESS}"
-        response = requests.get(url)
-        data = response.json()
-
-        hits = data['response']['hits']
-        
-        context = {
-            'hits' : hits, 'requestProfile':requestProfile
-        }
-
-        context.update({'form' : form})
-        return render(request, 'recording.html', context)
+            return redirect('recording')
     else:
         return redirect('profile')
 
