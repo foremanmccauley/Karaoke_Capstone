@@ -24,7 +24,7 @@ def Largest_Prime_Factor(n):
     return prime_factor
 
 def comp(request):
-    mp3 = AudioFileClip('karaoke/static/media/rr.mp3')
+    mp3 = AudioFileClip('karaoke/static/media/testfiles/rr.mp3')
     flist = ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
 
     arr = []
