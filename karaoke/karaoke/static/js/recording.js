@@ -5,15 +5,20 @@ let stopButton = document.getElementById("stopButton");
 let downloadButton = document.getElementById("downloadButton");
 let logElement = document.getElementById("log");
 let audio = document.getElementsByTagName("audio")[0];
+let recordingTimeMS =1000;
 
-let recordingTimeMS = 10000;
+audio.onloadedmetadata = function() {
+  alert(audio.duration);
+ recordingTimeMS =((audio.duration+1)*1000);
+
+};
 
 function log(msg) {
     logElement.innerHTML += msg + "\n";
   }
 
 function wait(delayInMS) {
-    //return new Promise(resolve => setTimeout(resolve, delayInMS));
+    return new Promise(resolve => setTimeout(resolve, delayInMS));
   }
 
 function startRecording(stream, lengthInMS) {
@@ -24,7 +29,7 @@ function startRecording(stream, lengthInMS) {
     if (audio)
       audio.play();
     recorder.start();
-    //log(recorder.state + "! for " + (lengthInMS/1000) + " seconds...");
+    log(recorder.state + "! for " + (lengthInMS/1000) + " seconds...");
       log(recorder.state + "!");
 
   
@@ -33,13 +38,13 @@ function startRecording(stream, lengthInMS) {
       recorder.onerror = event => reject(event.name);
     });
   
-    //let recorded = wait(lengthInMS).then(
-    //  () => recorder.state == "recording" && recorder.stop()
-   // );
+    let recorded = wait(lengthInMS).then(
+     () => recorder.state == "recording" && recorder.stop()
+    );
   
     return Promise.all([
       stopped,
-      //recorded
+      recorded
     ])
     .then(() => data);
   }
@@ -52,10 +57,13 @@ function stop(stream) {
   }
 
 startButton.addEventListener("click", function() {
+  
     navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true
     }).then(stream => {
+      log(audio.duration);
+      //recordingTimeMS=audio.duration;
       preview.srcObject = stream;
       downloadButton.href = stream;
       preview.captureStream = preview.captureStream || preview.mozCaptureStream;

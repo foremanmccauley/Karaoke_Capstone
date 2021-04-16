@@ -118,7 +118,8 @@ def recording(request):
                         requestProfile.mp4name = newsong.video.name
                         requestProfile.save()
 
-                        st2 = upload_file(request)
+                        f_name = 'static/media/' + newsong.video.name
+                        st2 = upload_file(request, f_name)
                         messages.info(request, st2)
 
                 return redirect('recording')#, {'requestProfile' : requestProfile})
@@ -143,6 +144,12 @@ def recording(request):
         return render(request, 'recording.html', context)
     else:
         return redirect('profile')
+
+def composite(request):
+    if request.method == 'POST' and 'run_script' in request.POST:
+        from .templatetags.composite import comp
+        comp(request)
+    return render(request, 'composite.html')
 
 def songselection(request):
     keywords = ''
