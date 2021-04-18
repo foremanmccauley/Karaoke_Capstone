@@ -148,7 +148,8 @@ def recording(request):
 def composite(request):
     if request.method == 'POST' and 'run_script' in request.POST:
         from .templatetags.composite import comp
-        comp(request)
+        requestProfile = Profile.objects.get(user=request.user)
+        comp(request, requestProfile)
     return render(request, 'composite.html')
 
 def songselection(request):

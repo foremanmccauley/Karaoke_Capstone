@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip, clips_array
 from moviepy.audio.fx.volumex import volumex
 from numpy import ceil, sqrt
+from karaoke.models import Profile
 
 register = template.Library()
 
@@ -13,14 +14,20 @@ def calc_cols(n):
     #ceiling of the sqrt of the number of videos
     return ceil(sqrt(n))
 
-def comp(request):
-    mp3 = AudioFileClip('karaoke/static/media/testfiles/rr.mp3')
-    flist = ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
+#def comp(request):
+   # mp3 = AudioFileClip('karaoke/static/media/testfiles/rr.mp3')
+   # flist = ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
 
 #test clip arrays
 # space: ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
 
-def comp(request, uid='001', mp3=AudioFileClip('karaoke/static/media/testfiles/rr.mp3'), flist=['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']):
+def comp(request, requestProfile): #mp3=AudioFileClip('karaoke/static/media/testfiles/rr.mp3')) flist=['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']):
+    mp3 = AudioFileClip('karaoke/static/media/testfiles/' + requestProfile.mp3name)
+    flist = []
+    flist.append('karaoke/static/media/testfiles/' + requestProfile.mp4name)
+    for profile in requestProfile.group.all():
+        flist.append('karaoke/static/media/testfiles/' + profile.mp4name)
+    flist.append('karaoke/static/media/testfiles/' + requestProfile.mp4name)
     arr = []
     temp = []
     cols = calc_cols(len(flist))
@@ -37,5 +44,5 @@ def comp(request, uid='001', mp3=AudioFileClip('karaoke/static/media/testfiles/r
     mp3 = mp3.fx(volumex, 0.20)
     audio = CompositeAudioClip([mp3, final.audio])
     final = final.set_audio(audio)
-    final.write_videofile("karaoke/static/media/outputs/" + uid + ".mp4", codec='libx264', audio_codec='aac')
+    final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
     return(final)
