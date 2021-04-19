@@ -19,12 +19,6 @@
     background-color: white;
     width: 100%;
 }
-
-#col-three {
-    grid-column: 3 / 3;
-    background-color: white;
-    width: 100%;
-}
 form {
     position: relative;
     width: 100%;
@@ -38,4 +32,9 @@ label {
     line-height: 0px;
     color: black;
     text-align: left;
+}
+#col-three {
+    grid-column: 3 / 3;
+    background-color: white;
+    width: 100%;
 }
