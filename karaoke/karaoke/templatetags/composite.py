@@ -5,6 +5,9 @@ from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip, cli
 from moviepy.audio.fx.volumex import volumex
 from numpy import ceil, sqrt
 from karaoke.models import Profile
+from mutagen.mp3 import MP3
+import subprocess
+from subprocess import call
 
 register = template.Library()
 
@@ -34,11 +37,21 @@ def calc_cols(n):
 # space: ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
 
 def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testfiles/rr.mp3'), flist=['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov']):
-    mp3 = AudioFileClip('karaoke/static/media/testfiles/' + requestProfile.mp3name)
+    mp3Len = 0
+    if requestProfile.mp3name:
+        mp3_name = 'karaoke/static/media/' + requestProfile.mp3name
+        mp3Info = MP3(mp3_name).info
+        mp3Len = int(mp3Info.length)
+        mp3 = AudioFileClip(mp3_name)
+        mp3 = mp3.set_duration(mp3Len)
+        mp3 = mp3.set_start(0.33)
     flist = []
-    flist.append('karaoke/static/media/testfiles/' + requestProfile.mp4name)
+    nlist = []
+    flist.append('karaoke/static/media/' + requestProfile.mp4name)
+    nlist.append(requestProfile.mp4name)
     for profile in requestProfile.group.all():
-        flist.append('karaoke/static/media/testfiles/' + profile.mp4name)
+        flist.append('karaoke/static/media/' + profile.mp4name)
+        nlist.append(profile.mp4name)
     arr = []
     temp = []
     cols = calc_cols(len(flist))
@@ -50,13 +63,15 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
 
     #creating clip_array
     for i in range(0,len(flist)):
+        nlist[i] = nlist[i][:-4]
+        convName = 'karaoke/static/media/converted/' + nlist[i] + '.mp4'
         if i % cols == 0 and i != 0:
             arr.append(temp)
             temp = []
-        temp.append(VideoFileClip(flist[i]).margin(10))
+        subprocess.call(['ffmpeg', '-i', flist[i], convName])
+        tempVid = VideoFileClip(convName).margin(10)
+        temp.append(tempVid)
     arr.append(temp)
-
-    print(arr)
 
     final = clips_array(arr)
     mp3 = mp3.fx(volumex, 0.20)
