@@ -70,10 +70,10 @@ startButton.addEventListener("click", function() {
       return new Promise(resolve => preview.onplaying = resolve);
     }).then(() => startRecording(preview.captureStream(), recordingTimeMS))
     .then (recordedChunks => {
-      let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
+      let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
       recording.src = URL.createObjectURL(recordedBlob);
       downloadButton.href = recording.src;
-      downloadButton.download = "karaokevideo.mp4";
+      downloadButton.download = "karaokevideo.webm";
   
       //log("Successfully recorded " + recordedBlob.size + " bytes of " +
          // recordedBlob.type + " media.");

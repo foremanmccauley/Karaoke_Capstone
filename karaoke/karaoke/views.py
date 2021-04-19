@@ -149,7 +149,7 @@ def composite(request):
     if request.method == 'POST' and 'run_script' in request.POST:
         from .templatetags.composite import comp
         requestProfile = Profile.objects.get(user=request.user)
-        comp(request)#, requestProfile)
+        comp(request, requestProfile)
     return render(request, 'composite.html')
 
 def songselection(request):
