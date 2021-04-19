@@ -13,26 +13,33 @@
     <main>
     <div class="wrapper">
         <div class = "box a">
-            <h1> My Profile </h1>
+            <h1> Hi {{request.user}}! </h1>
         </div>
-        <div class = "box b">
-            
-            <h2> My Friends </h2>
-            {% for profile in requestProfile.friends.all %}
-                {% if profile.user.username != request.user.username %}
-                    {{profile}}
-                {% endif %} 
-            {%endfor%}
         
-        </div>
-        <div class = "box c">
-            {% if in_group %}
-            <h2> These are your group members... </h2>
-            {% for profile in requestProfile.group.all %}
-                {% if profile.user.username != request.user.username %}
-                    {{profile}} </br>
+        <div class = "box b">
+            <h2> Friend Requests </h2>
+            {% for r in fr %}
+                {% if r.is_active == True %}
+                    <a href="{% url 'accept_friend' r.id %}"> Accept {{r.from_user}} </a>
+                {%endif%}
+            {%endfor%}
+            
+            <h2> Send Friend Request </h2>
+            {% for profile in allprofiles %}
+                {% if profile not in requestProfile.friends.all %}
+                    <a href="{% url 'add-friend' profile.id %}"> {{profile}} +</a> </br>    
                 {% endif %}
-            {% endfor %}
+            {%endfor%}
+        </div>
+        
+        <div class = "box c">
+        {% if in_group %}
+            <h2> These are your group members... </h2>
+                {% for profile in requestProfile.group.all %}
+                    {% if profile.user.username != request.user.username %}
+                        {{profile}} </br>
+                    {% endif %}
+                {% endfor %}
             {% if requestProfile.is_group_parent%}
                   <h2> Invite more members to your group! </h2>
                   {% for profile in requestProfile.friends.all %}
@@ -57,27 +64,16 @@
         {% endif %}
         </div>
         <div class = "box d">
-            <h2> Friend Requests </h2>
-            {% for r in fr %}
-                {% if r.is_active == True %}
-                    <a href="{% url 'accept_friend' r.id %}"> Accept {{r.from_user}} </a>
-                {%endif%}
-            {%endfor%}
-            
-            <h2> Send a friend request </h2>
-            {% for profile in allprofiles %}
-                {% if profile not in requestProfile.friends.all %}
-                    <a href="{% url 'add-friend' profile.id %}"> {{profile}} +</a> </br>    
-                {% endif %}
+            <h2> My Friends </h2>
+            {% for profile in requestProfile.friends.all %}
+                {% if profile.user.username != request.user.username %}
+                    {{profile}}
+                {% endif %} 
             {%endfor%}
         </div>
     </div>
-        
-
-        
-
-        
 
     </main>
 </body>
+{%include 'footer.html'%}
 </html>
