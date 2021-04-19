@@ -12,7 +12,19 @@ register = template.Library()
 
 def calc_cols(n):
     #ceiling of the sqrt of the number of videos
-    return ceil(sqrt(n))
+    num = {
+        1: 1,
+        2: 2,
+        3: 2,
+        4: 2,
+        5: 3,
+        6: 3,
+        7: 4,
+        8: 3,
+        9: 3,
+        10: 5
+    }
+    return num.get(n)
 
 #def comp(request):
    # mp3 = AudioFileClip('karaoke/static/media/testfiles/rr.mp3')
@@ -21,16 +33,20 @@ def calc_cols(n):
 #test clip arrays
 # space: ['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']
 
-def comp(request, requestProfile): #mp3=AudioFileClip('karaoke/static/media/testfiles/rr.mp3')) flist=['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov', 'karaoke/static/media/testfiles/5.mov']):
+def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testfiles/rr.mp3'), flist=['karaoke/static/media/testfiles/1.mp4', 'karaoke/static/media/testfiles/2.mov', 'karaoke/static/media/testfiles/4.mov']):
     mp3 = AudioFileClip('karaoke/static/media/testfiles/' + requestProfile.mp3name)
     flist = []
     flist.append('karaoke/static/media/testfiles/' + requestProfile.mp4name)
     for profile in requestProfile.group.all():
         flist.append('karaoke/static/media/testfiles/' + profile.mp4name)
-    flist.append('karaoke/static/media/testfiles/' + requestProfile.mp4name)
     arr = []
     temp = []
     cols = calc_cols(len(flist))
+
+    blank = 'karaoke/static/media/blank.mp4'
+    #adding a blank file if there's an uneven number of videos
+    if len(flist) == 3 or len(flist) == 5 or len(flist) == 7:
+        flist.append(blank)
 
     #creating clip_array
     for i in range(0,len(flist)):
@@ -40,9 +56,12 @@ def comp(request, requestProfile): #mp3=AudioFileClip('karaoke/static/media/test
         temp.append(VideoFileClip(flist[i]).margin(10))
     arr.append(temp)
 
+    print(arr)
+
     final = clips_array(arr)
     mp3 = mp3.fx(volumex, 0.20)
     audio = CompositeAudioClip([mp3, final.audio])
     final = final.set_audio(audio)
-    final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
+    #final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
+    final.write_videofile("karaoke/static/media/outputs/" + 'hello' + ".mp4", codec='libx264', audio_codec='aac')
     return(final)
