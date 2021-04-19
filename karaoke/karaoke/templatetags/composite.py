@@ -51,7 +51,7 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
     nlist.append(requestProfile.mp4name)
     for profile in requestProfile.group.all():
         flist.append('karaoke/static/media/' + profile.mp4name)
-        nlist.append(profile.mp4name)
+        nlist.append(profile.user.username)
     arr = []
     temp = []
     cols = calc_cols(len(flist))
@@ -60,16 +60,20 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
     #adding a blank file if there's an uneven number of videos
     if len(flist) == 3 or len(flist) == 5 or len(flist) == 7:
         flist.append(blank)
+        nlist.append('blank.mp4')
 
     #creating clip_array
     for i in range(0,len(flist)):
-        nlist[i] = nlist[i][:-4]
-        convName = 'karaoke/static/media/converted/' + nlist[i] + '.mp4'
+        convName = ''
+        if nlist[i] != 'blank.mp4':
+            convName = 'karaoke/static/media/converted/' + nlist[i] + '.mp4'
+        else:
+            convName = nlist[i]
         if i % cols == 0 and i != 0:
             arr.append(temp)
             temp = []
         subprocess.call(['ffmpeg', '-i', flist[i], convName])
-        tempVid = VideoFileClip(convName).margin(10)
+        tempVid = VideoFileClip(convName).margin(10).set_fps(30)
         temp.append(tempVid)
     arr.append(temp)
 
@@ -77,6 +81,6 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
     mp3 = mp3.fx(volumex, 0.20)
     audio = CompositeAudioClip([mp3, final.audio])
     final = final.set_audio(audio)
-    #final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
-    final.write_videofile("karaoke/static/media/outputs/" + 'hello' + ".mp4", codec='libx264', audio_codec='aac')
+    final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
+    #final.write_videofile("karaoke/static/media/outputs/" + 'hello' + ".mp4", codec='libx264', audio_codec='aac')
     return(final)
