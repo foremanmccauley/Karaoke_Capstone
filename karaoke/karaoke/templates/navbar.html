@@ -10,10 +10,10 @@
         {% url 'recording' as recording_url %}
         <span>{% if request.path == recording_url %} Recording {% else %}<a href="{% url 'recording' %}"> Recording</a>{% endif %}</span>
         {% url 'composite' as composite_url %}
-        <span>{% if request.path == composite_url %} Composite Videos{% else %}<a href="{% url 'composite' %}"> Composite Videos </a>{% endif %}</span>
+        <span>{% if request.path == composite_url %} Composite Videos{% else %}<a href="{% url 'composite' %}"> Composite Videos</a>{% endif %}</span>
         <span> Hello, {{request.user}}</span>
-        {% url 'login' as login_url %}
-        <span>{% if request.path == login_url %} Profile {% else %}<a href="{% url 'profile' %}"> Profile</a>{% endif %}</span>
+        {% url 'profile' as profile_url %}
+        <span>{% if request.path == profile_url %} Profile {% else %}<a href="{% url 'profile' %}"> Profile</a>{% endif %}</span>
         <span><a href="{% url 'logoutuser' %}">Logout</a></span>
     {% else %}
         {% url 'register' as register_url %}
