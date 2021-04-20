@@ -8,7 +8,7 @@ let audio = document.getElementsByTagName("audio")[0];
 let recordingTimeMS =1000;
 
 audio.onloadedmetadata = function() {
-  alert(audio.duration);
+  //alert(audio.duration);
  recordingTimeMS =((audio.duration+1)*1000);
 
 };

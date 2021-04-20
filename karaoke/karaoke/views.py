@@ -13,6 +13,8 @@ import requests
 
 def index(request):
     return render(request, 'index.html')
+def help(request):
+    return render(request, 'help.html')
 
 def profile(request):
     if request.user.is_authenticated:

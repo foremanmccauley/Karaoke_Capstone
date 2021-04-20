@@ -52,3 +52,23 @@ footer {
     background-color: darkred;
     color: white;
 }
+
+.column {
+    float: left;
+}
+  
+  .left {
+    width: 25%;
+    
+
+}
+  
+  .right {
+    width: 75%;
+
+}
+
+img{
+    max-width: 75%;
+    height: auto;/*to preserve the aspect ratio of the image*/
+}
