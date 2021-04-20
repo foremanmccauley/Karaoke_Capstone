@@ -12,4 +12,4 @@ class SearchForm(forms.Form):
 
 class MP3Form(forms.Form):
     song = forms.FileField(label='MP3 file here', required=False)
-    video = forms.FileField(label='MP4 file here', required=False)
+    video = forms.FileField(label='WEBM file here', required=False)
