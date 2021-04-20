@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.http import FileResponse
 from .forms import RegistrationForm, SearchForm, MP3Form
 from .models import Profile, FriendRequest, MP3, GroupRequest, MP4
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from .templatetags.credentials import GENIUS_ACCESS
 import requests
+
 
 def index(request):
     return render(request, 'index.html')
@@ -152,7 +154,11 @@ def composite(request):
         from .templatetags.composite import comp
         requestProfile = Profile.objects.get(user=request.user)
         comp(request, requestProfile)
+        response= FileResponse(open('karaoke/static/media/outputs/'+requestProfile.user.username+'.mp4', 'rb'), as_attachment=True, filename='karaokevideo.mp4')
+        return response
+
     return render(request, 'composite.html')
+
 
 def songselection(request):
     keywords = ''
