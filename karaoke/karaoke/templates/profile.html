@@ -64,16 +64,18 @@
                     {% endif %}
                 {%endfor%}
             </div>
-            <h2> Join a group you have been invited to! </h2>
-            {% for r in gr %}
-                {% if r.is_active == True %}
-                    <a class = "fas fa-users" href="{% url 'accept_group_member' r.id %}"> Join {{r.from_user}} </a> </br>
-                {%endif%}
-            {%endfor%}
-        {% endif %}
         </div>
+            <div class = "box d">
+                <h2> Join a group you have been invited to! </h2>
+                {% for r in gr %}
+                    {% if r.is_active == True %}
+                        <a class = "fas fa-users" href="{% url 'accept_group_member' r.id %}"> Join {{r.from_user}} </a> </br>
+                    {%endif%}
+                {%endfor%}
+            </div>
+        {% endif %}
         
-        <div class = "box d">
+        <div class = "box e">
             <h2> My Friends </h2>
             {% for profile in requestProfile.friends.all %}
                 {% if profile.user.username != request.user.username %}
