@@ -22,7 +22,7 @@
             <div class ="vertical-menu"> 
             {% for r in fr %}
                 {% if r.is_active == True %}
-                    <a href="{% url 'accept_friend' r.id %}" class = "fas fa-user-plus"> Accept {{r.from_user}} </a></br>
+                    <a href="{% url 'accept_friend' r.id %}" class = "fas fa-user-plus" onclick = "confirmAction('Friend Added!')"> Accept {{r.from_user}} </a></br>
                 {%endif%}
             {%endfor%}
             </div>
@@ -31,7 +31,7 @@
             <div class ="vertical-menu"> 
             {% for profile in allprofiles %}
                 {% if profile not in requestProfile.friends.all %}
-                    <a href="{% url 'add-friend' profile.id %}" class = "active fas fa-user-plus"> {{profile}} </a></br>
+                    <a href="{% url 'add-friend' profile.id %}" class = "active fas fa-user-plus" onclick = "confirmAction('Friend Request Sent!')"> {{profile}} </a></br>
                 {% endif %}
             {%endfor%}
             </div>
@@ -40,17 +40,19 @@
         <div class = "box c">
         {% if in_group %}
             <h2> These are your group members... </h2>
+                <div class ="vertical-menu"> 
                 {% for profile in requestProfile.group.all %}
                     {% if profile.user.username != request.user.username %}
                         {{profile}} </br>
                     {% endif %}
                 {% endfor %}
+                </div>
             {% if requestProfile.is_group_parent%}
                   <h2> Invite more members to your group! </h2>
                   <div class ="vertical-menu"> 
                     {% for profile in requestProfile.friends.all %}
                         {% if profile not in requestProfile.group.all %}
-                            <a href="{% url 'add-group-member' profile.id %}"> {{profile}} +</a> </b>    
+                            <a href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> {{profile}} +</a> </b>    
                         {% endif %}
                     {%endfor%}
                 </div>
@@ -60,7 +62,7 @@
             <div class="fas vertical-menu">
                 {% for profile in requestProfile.friends.all %}
                     {% if profile not in requestProfile.group.all %}
-                        <a class = "fas fa-paper-plane" href="{% url 'add-group-member' profile.id %}"> Invite {{profile}} </a></br>     
+                        <a class = "fas fa-paper-plane" href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> Invite {{profile}} </a></br>     
                     {% endif %}
                 {%endfor%}
             </div>
@@ -69,7 +71,7 @@
                 <h2> Join a group you have been invited to! </h2>
                 {% for r in gr %}
                     {% if r.is_active == True %}
-                        <a class = "fas fa-users" href="{% url 'accept_group_member' r.id %}"> Join {{r.from_user}} </a> </br>
+                        <a class = "fas fa-users" href="{% url 'accept_group_member' r.id %}" onclick = "confirmAction('Joined Group!')"> Join {{r.from_user}} </a> </br>
                     {%endif%}
                 {%endfor%}
             </div>
@@ -77,15 +79,22 @@
         
         <div class = "box e">
             <h2> My Friends </h2>
+            <div class ="vertical-menu"> 
             {% for profile in requestProfile.friends.all %}
-                {% if profile.user.username != request.user.username %}
-                    {{profile}} </br>
+                <i class = "fas fa-user-circle"> {% if profile.user.username != request.user.username %}
+                    {{profile}}</i> </br>
                 {% endif %} 
             {%endfor%}
+            </div>
         </div>
     </div>
 
     </main>
+    <script>
+        function confirmAction(message) {
+            confirm(message);
+        }
+    </script>
 </body>
 {%include 'footer.html'%}
 </html>
