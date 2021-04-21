@@ -1,28 +1,73 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Original+Surfer&display=swap');
+.navbar {
+    width: 100%;
+    text-align: center;
+    height:100px;
+}
+ul li {
+ float: left;
+ list-style: none;
+ margin-right: 1em; 
+ font-family: 'Original Surfer', cursive;
+}
+ 
+li a {
+ color: #544738;
+ text-decoration: none;
+ float: left;
+ padding: 12px;
+}
+.nav-item1 a:hover {
+ /*Transition*/ 
+ -webkit-transition:All .5s ease;
+ -moz-transition:All .5s ease;
+ -o-transition:All .5s ease;
+ 
+ /*Transform*/ 
+ -webkit-transform: rotate(-10deg) scale(1.2);
+ -moz-transform: rotate(-10deg) scale(1.2);
+ -o-transform: rotate(-10deg) scale(1.2);
+}
+ 
+.nav-item2 a:hover {
+ /*Transition*/ 
+ -webkit-transition:All .5s ease;
+ -moz-transition:All .5s ease;
+ -o-transition:All .5s ease;
+ 
+ /*Transform*/ 
+ -webkit-transform: rotate(10deg) scale(1.2);
+ -moz-transform: rotate(10deg) scale(1.2);
+ -o-transform: rotate(10deg) scale(1.2);
+}
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href='{% url 'index' %}'>Home</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
+      <li class = "nav-item1 is-active" active-color="darkred">
+        <a class="nav-link" href='{% url 'index' %}'>Home</a>
+      </li>
       {% if user.is_authenticated %}
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href='{% url 'songselection' %}'>Song Selection</a>
+        <li class="nav-item2">
+          <a class="nav-link2" href='{% url 'songselection' %}'>Song Selection</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item1">
           <a class="nav-link" href='{% url 'recording' %}'>Recording</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item2">
           <a class="nav-link" href='{% url 'composite' %}'>Composite Video</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item1">
           <a class="nav-link" href='{% url 'profile' %}'>Profile</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item2">
           <a class="nav-link" href='{% url 'help' %}'>Help!</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item1">
           <a class="nav-link" href='{% url 'logoutuser' %}'>Log Out</a>
         </li>
         <li class="nav-item">
@@ -30,22 +75,19 @@
             Logged in as: {{request.user}}
           </span>
         </li>
-      </ul>
       {% else %}
-      <ul class="navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item2">
           <a class="nav-link" href='{% url 'songselection' %}'>Song Selection</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item1">
           <a class="nav-link" href='{% url 'help' %}'>Help!</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item2">
           <a class="nav-link" href='{% url 'register' %}'>Sign Up</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item1">
           <a class="nav-link" href='{% url 'loginpage' %}'>Log In</a>
         </li>
-      </ul>
       {% endif %}
     </ul>
   </div>
