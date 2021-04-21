@@ -1,13 +1,20 @@
 import requests
 from django import template
 from django.utils.safestring import mark_safe
+from django.http import FileResponse
+from django.http import HttpResponse
 from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip, clips_array
 from moviepy.audio.fx.volumex import volumex
 from numpy import ceil, sqrt
 from karaoke.models import Profile
 from mutagen.mp3 import MP3
+from wsgiref.util import FileWrapper
 import subprocess
 from subprocess import call
+import urllib.request
+import shutil
+
+
 
 register = template.Library()
 
@@ -73,7 +80,7 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
             arr.append(temp)
             temp = []
         subprocess.call(['ffmpeg', '-i', flist[i], convName])
-        tempVid = VideoFileClip(convName).margin(10).set_fps(30)
+        tempVid = VideoFileClip(convName).margin(10).set_fps(24)
         temp.append(tempVid)
     arr.append(temp)
 
@@ -82,5 +89,10 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
     audio = CompositeAudioClip([mp3, final.audio])
     final = final.set_audio(audio)
     final.write_videofile("karaoke/static/media/outputs/" + requestProfile.user.username + ".mp4", codec='libx264', audio_codec='aac')
-    #final.write_videofile("karaoke/static/media/outputs/" + 'hello' + ".mp4", codec='libx264', audio_codec='aac')
+    #print("Passed 1")
+
+    #final.write_videofile("karaoke/static/media/outputs/" + 'hello' + ".mp4", codec='libx264', audio_codec='aac')    
+    #response= FileResponse(open('karaoke/static/media/outputs/'+requestProfile.user.username+'.mp4', 'rb'), as_attachment=True, filename='test.mp4')
+   # print("Passed 2")
+    #return (response)
     return(final)

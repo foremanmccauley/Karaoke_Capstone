@@ -16,14 +16,16 @@
     {%include 'navbar.html'%}
     <h1>Combine your recordings here:</h1>
     <h3>Make sure that everyone in your group has uploaded before clicking go!</h3>
-
     <!-- Maybe get groups status here? Show which are ready to composite? -->
 
     <!-- Create mashup -->
     <form method='post'>
         {% csrf_token %}
         <button type="submit" name="run_script">Go!</button>
+        
     </form>
+    
+
 </body>
 
 {%include 'footer.html'%}
