@@ -32,3 +32,17 @@ h2{
     grid-row: 2 ;
     width: 100%;
 }
+.vertical-menu a{
+    background-color: #eee;
+    color:black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+.vertical-menu a:hover{
+    background-color: #ccc;
+}
+.vertical-menu a.active{
+    background-color: darkred;
+    color: white;
+}
