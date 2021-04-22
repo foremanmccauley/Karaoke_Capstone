@@ -47,17 +47,24 @@
                     {% endif %}
                 {% endfor %}
                 </div>
-            {% if requestProfile.is_group_parent%}
-                  <h2> Invite more members to your group! </h2>
-                  <div class ="vertical-menu"> 
-                    {% for profile in requestProfile.friends.all %}
-                        {% if profile not in requestProfile.group.all %}
-                            <a href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> {{profile}} +</a> </b>    
-                        {% endif %}
-                    {%endfor%}
-                </div>
-            {% endif %}
+        </div>
+            <div class = "box d">
+                {% if requestProfile.is_group_parent%}
+                    <h2> Invite more members to your group! </h2>
+                    <div class ="vertical-menu"> 
+                        {% for profile in requestProfile.friends.all %}
+                            {% if profile not in requestProfile.group.all %}
+                                <a href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> {{profile}} +</a> </b>    
+                            {% endif %}
+                        {%endfor%}
+                    </div>
+                {% else %}
+                    <h2>To add more members, please contact group owner!</h2>
+                    
+                {% endif %}
+            </div>
         {% else %}
+        <div class = "box c">
             <h2> Invite your friends to start a group! </h2>
             <div class="fas vertical-menu">
                 {% for profile in requestProfile.friends.all %}
@@ -67,6 +74,7 @@
                 {%endfor%}
             </div>
         </div>
+        
             <div class = "box d">
                 <h2> Join a group you have been invited to! </h2>
                 {% for r in gr %}
