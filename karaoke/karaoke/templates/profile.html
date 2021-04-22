@@ -37,8 +37,8 @@
             </div>
         </div>
         
-        <div class = "box c">
         {% if in_group %}
+        <div class = "box c">
             <h2> These are your group members... </h2>
                 <div class ="vertical-menu"> 
                 {% for profile in requestProfile.group.all %}
@@ -54,7 +54,7 @@
                     <div class ="vertical-menu"> 
                         {% for profile in requestProfile.friends.all %}
                             {% if profile not in requestProfile.group.all %}
-                                <a href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> {{profile}} +</a> </b>    
+                                <a href="{% url 'add-group-member' profile.id %}" class = "fas fa-paper-plane" onclick = "confirmAction('Invitation Sent!')"> {{profile}} </a> </b>    
                             {% endif %}
                         {%endfor%}
                     </div>
@@ -64,16 +64,16 @@
                 {% endif %}
             </div>
         {% else %}
-        <div class = "box c">
-            <h2> Invite your friends to start a group! </h2>
-            <div class="fas vertical-menu">
-                {% for profile in requestProfile.friends.all %}
-                    {% if profile not in requestProfile.group.all %}
-                        <a class = "fas fa-paper-plane" href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> Invite {{profile}} </a></br>     
-                    {% endif %}
-                {%endfor%}
+            <div class = "box c">
+                <h2> Invite your friends to start a group! </h2>
+                <div class="fas vertical-menu">
+                    {% for profile in requestProfile.friends.all %}
+                        {% if profile not in requestProfile.group.all %}
+                            <a class = "fas fa-paper-plane" href="{% url 'add-group-member' profile.id %}" onclick = "confirmAction('Invitation Sent!')"> Invite {{profile}} </a></br>     
+                        {% endif %}
+                    {%endfor%}
+                </div>
             </div>
-        </div>
         
             <div class = "box d">
                 <h2> Join a group you have been invited to! </h2>
