@@ -67,11 +67,20 @@
       </div>
   </div>
 </div>
-<h2> Search for song lyrics by title or artist: </h2>
-<form action="" method="get">
-  <input type="text" name="songdetail">
-  <button type="submit" value="Go">Go!</button>
-</form>
+<h2> Song Lyrics </h2>
+<div id="cover">
+  <form action="" method="get">
+    <div class="tb">
+      <div class="td"><input type="text" placeholder = "Search by title or artist" name="songdetail"></div>
+        <div class ="td" id="s-cover">
+          <button type="submit" value="Go">
+            <div id = "s-circle"></div>
+            <span></span>
+          </button>
+        </div>
+    </div>
+  </form>
+</div>
 <div class="row">
   {% for i in hits %}
   <div class="column">
@@ -88,8 +97,8 @@
 var elements = document.getElementsByClassName("column");
 var i;
 for (i = 0; i < elements.length; i++) {
-  elements[i].style.msFlex = "25%";
-  elements[i].style.flex = "25%";
+  elements[i].style.msFlex = "33.3%";
+  elements[i].style.flex = "33.3%";
 }
 </script>
 </body>
