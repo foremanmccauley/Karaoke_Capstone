@@ -48,7 +48,7 @@ label {
     display: table-cell;
 }
 
-input, button
+input[type = text], button
 {
     color: #fff;
     font-family: Nunito;
