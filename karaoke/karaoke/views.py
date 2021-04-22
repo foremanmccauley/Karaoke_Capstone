@@ -20,7 +20,7 @@ def help(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        requestProfile = Profile.objects.get(user=request.user)           
+        requestProfile = Profile.objects.get(user=request.user)
         allprofiles=Profile.objects.exclude(user=request.user)
         fr = FriendRequest.objects.filter(to_user=request.user)
         gr = GroupRequest.objects.filter(to_user=request.user)
@@ -31,7 +31,7 @@ def profile(request):
         if count > 0:
             in_group = True
         return render(request, 'profile.html',{'allprofiles':allprofiles, 'fr':fr, 'requestProfile':requestProfile, 'in_group':in_group, 'gr':gr})
-    
+
     else:
         return redirect('index')
 
@@ -125,6 +125,7 @@ def recording(request):
                         f_name = 'static/media/' + newsong.video.name
                         st2 = upload_file(request, f_name)
                         messages.info(request, st2)
+                        messages.info(request, 'File successfully uploaded!')
 
                 return redirect('recording')#, {'requestProfile' : requestProfile})
         else:
