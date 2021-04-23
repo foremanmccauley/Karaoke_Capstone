@@ -54,8 +54,6 @@ def comp(request, requestProfile):#mp3=AudioFileClip('karaoke/static/media/testf
         mp3 = mp3.set_start(0.33)
     flist = []
     nlist = []
-    flist.append('karaoke/static/media/' + requestProfile.mp4name)
-    nlist.append(requestProfile.mp4name)
     for profile in requestProfile.group.all():
         flist.append('karaoke/static/media/' + profile.mp4name)
         nlist.append(profile.user.username)
